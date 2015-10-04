@@ -9,9 +9,12 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r}
+```{r, echo=False}
 data(cars)
 summary(cars)
+install.packages("dplyr")
+library("dplyr")
+
 ```
 
 You can also embed plots, for example:
@@ -24,7 +27,27 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 
 Images
-![alt text](http://example.com/logo.png)
+#![alt text](http://example.com/logo.png)
 
-![alt text](figures/img.png)
+#![alt text](figures/img.png)
 
+```{r read-in-data}
+gap.in <- read.table("output/combined_gapMinder.tsv", sep = "\t", header = TRUE)
+
+summary(gap.in)
+gap.in %>% 
+  select(pop, country) %>%
+  head
+  
+gap.in %>%
+  select(pop,country,continent) %>%
+  group_by(continent) %>%
+  summarise(mean = mean(pop))
+
+gap.in %>%
+  select(year,pop,country,continent) %>%
+  filter(year == 2002) %>%
+  group_by(continent) %>%
+  summarise(mean = mean(pop))
+
+```
